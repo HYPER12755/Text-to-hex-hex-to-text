@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hex Converter</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #1e1e2f;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #00e6e6;
+      text-shadow: 2px 2px 10px rgba(0, 230, 230, 0.7);
+    }
+
+    textarea {
+      width: 90%;
+      max-width: 500px;
+      height: 100px;
+      background: #2a2a3b;
+      color: #00e6e6;
+      border: 2px solid #00e6e6;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    textarea:focus {
+      border-color: #ff00ff;
+      box-shadow: 0 0 10px #ff00ff;
+    }
+
+    .button-container {
+      margin: 10px 0;
+    }
+
+    button {
+      background: linear-gradient(45deg, #00e6e6, #ff00ff);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: 0.3s ease-in-out;
+      margin: 0 5px;
+      box-shadow: 2px 2px 10px rgba(0, 230, 230, 0.5);
+    }
+
+    button:hover {
+      background: linear-gradient(45deg, #ff00ff, #00e6e6);
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 600px) {
+      textarea {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🔄 Live Text ↔ Hex Converter</h2>
+
+  <textarea id="input" placeholder="Type text or hex..."></textarea>
+
+  <div class="button-container">
+    <button onclick="copyOutput()">📋 Copy Output</button>
+    <button onclick="clearFields()">🧹 Clear</button>
+  </div>
+
+  <textarea id="output" readonly placeholder="Auto conversion result..."></textarea>
+
+  <script>
+    const inputArea = document.getElementById('input');
+    const outputArea = document.getElementById('output');
+
+    function isHex(str) {
+      return /^[0-9a-fA-F]+$/.test(str) && str.length % 2 === 0;
+    }
+
+    function autoConvert() {
+      const input = inputArea.value.trim();
+      let result = '';
+
+      if (isHex(input)) {
+        for (let i = 0; i < input.length; i += 2) {
+          result += String.fromCharCode(parseInt(input.substr(i, 2), 16));
+        }
+      } else {
+        for (let i = 0; i < input.length; i++) {
+          result += input.charCodeAt(i).toString(16).padStart(2, '0');
+        }
+      }
+
+      outputArea.value = result;
+    }
+
+    inputArea.addEventListener('input', autoConvert);
+
+    function copyOutput() {
+      outputArea.select();
+      document.execCommand('copy');
+      alert('✅ Output copied to clipboard!');
+    }
+
+    function clearFields() {
+      inputArea.value = '';
+      outputArea.value = '';
+      inputArea.focus();
+    }
+  </script>
+
+</body>
+</html>
